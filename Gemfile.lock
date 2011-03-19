@@ -1,0 +1,33 @@
+GIT
+  remote: https://github.com/brianmario/mysql2.git
+  revision: 588db288328fa6dd51b837ad5667015adf615962
+  specs:
+    mysql2 (0.2.6)
+
+GIT
+  remote: https://github.com/igrigorik/em-synchrony.git
+  revision: 8977ba44351903bd16690293cc07b4eb43f1558a
+  specs:
+    em-synchrony (0.3.0.beta.1)
+      eventmachine (>= 1.0.0.beta.1)
+
+GIT
+  remote: https://github.com/mikewadhera/arel.git
+  revision: cfa91fa08acbbc85a2846f9de1ab14365afab5f9
+  specs:
+    arel (2.0.7.beta.20110228092631)
+
+GEM
+  remote: http://rubygems.org/
+  remote: http://gems.github.com/
+  specs:
+    eventmachine (1.0.0.beta.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  arel!
+  em-synchrony!
+  eventmachine (>= 1.0.0.beta.1)
+  mysql2!
