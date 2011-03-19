@@ -5,7 +5,8 @@ a modern, lightweight mysql ORM for ruby 1.9
 ## Features
 
 ### modern
-- uses ARel for Query API, MySQL2 EM fiber-enabled driver for asynchronous I/O
+- uses ARel for query generation
+- uses MySQL2 eventmachine driver for asynchronous I/O
 - supports partial updates and dirty tracking
 	
 ### lightweight
