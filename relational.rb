@@ -19,10 +19,6 @@ module Relational
         def table
           @@table
         end
-        
-        def relation
-          @relation ||= Arel::Table.new(self.table)
-        end
       end
     end
     superclass
@@ -89,12 +85,14 @@ module Relational
   
   module QueryMethods
     
-    def [](attribute)
-      self.relation[attribute]
+    Star = Arel::SqlLiteral.new('*')
+    
+    def relation
+      @relation ||= Arel::Table.new(self.table)
     end
     
     def select(*attributes)
-      projection = attributes.empty? ? Arel::SqlLiteral.new('*') : attributes.map { |a| self[a] }
+      projection = attributes.empty? ? QueryMethods::Star : attributes.map { |a| Symbol === a ? self.relation[a] : a }
       sql = self.relation.project(projection).to_sql
       query(sql)
     end
@@ -116,7 +114,7 @@ module Relational
     
     def each
       @result.each do |row|
-        yield(@entity.new(nil, row))
+        yield @entity.new(nil, row)
       end
       self
     end
