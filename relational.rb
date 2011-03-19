@@ -87,20 +87,47 @@ module Relational
     
     Star = Arel::SqlLiteral.new('*')
     
-    def relation
-      @relation ||= Arel::Table.new(self.table)
+    def self.extended(base)
+      base.class_eval do
+        class << self
+          attr_accessor :select_values
+        end
+      end
     end
-    
+        
     def select(*attributes)
-      projection = attributes.empty? ? QueryMethods::Star : attributes.map { |a| Symbol === a ? self.relation[a] : a }
-      sql = self.relation.project(projection).to_sql
-      query(sql)
+      cloned = self.clone
+      cloned.select_values ||= []
+      cloned.select_values += attributes
+      cloned
     end
     
     def query(sql)
       ConnectionPool.with_connection do |mysql|
         QueryResult.new(self, mysql.query(sql, symbolize_keys: true))
       end
+    end
+    
+    def each
+      query(self.select_manager.to_sql).each do |object|
+        yield object
+      end
+    end
+        
+    protected
+    
+    def select_manager
+      @select_manager ||= self.build_select_manager
+    end    
+    
+    def build_select_manager
+      relation = Arel::Table.new(self.table)
+      
+      # projection
+      projection = @select_values.empty? ? QueryMethods::Star : @select_values.map { |a| Symbol === a ? relation[a] : a }
+      manager = relation.project(projection)
+      
+      manager
     end
         
   end
