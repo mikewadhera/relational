@@ -29,7 +29,7 @@ EM.run do
   1.upto concurrency do |i|
     Fiber.new {
       # no callbacks!
-      result = User.select(:id, :name)
+      result = User.select(:id, :name).where(User[:id].eq(1))
       
       result.each do |user|
         puts user.id
